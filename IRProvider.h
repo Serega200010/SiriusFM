@@ -1,4 +1,5 @@
-
+#pragma once
+#include <cstring>
 namespace SiriusFM
 {
 enum class CcyE
@@ -11,6 +12,32 @@ enum class CcyE
     N = 5
 };
 
+inline CcyE Str2CcyE(char const* a_str)
+{
+    if(strcmp(a_str,"USD") == 0 )return CcyE::USD;
+    if(strcmp(a_str,"EUR") == 0 )return CcyE::EUR;
+    if(strcmp(a_str,"GBP") == 0 )return CcyE::GBP;
+    if(strcmp(a_str,"CHF") == 0 )return CcyE::CHF;
+    if(strcmp(a_str,"RUB") == 0 )return CcyE::RUB;
+
+    throw std::invalid_argument("Invalid argument");
+
+};
+
+inline char const* CcyE2Str(CcyE a_ccy)
+    {
+        switch(a_ccy)
+        {
+            case CcyE::USD : return "USD";
+            case CcyE::EUR : return "EUR";
+            case CcyE::GBP : return "GBP";
+            case CcyE::CHF : return "CHF";
+            case CcyE::RUB : return "RUB";
+            default : throw std::invalid_argument("Invalid argument");
+        };
+
+    };
+
 enum class IRModeE
 {
     Const = 0,
@@ -21,16 +48,6 @@ enum class IRModeE
 template<IRModeE IRM>
 class IRProvider;
 
-template<>
-class IRProvider<IRModeE::Const>
-{
-    private:
-        double m_IRs[int(CcyE::N)];
-    public:
-        IRProvider(std::string const & a_file);
-        double r(CcyE a_ccy, double a_t){return m_IRs[a_ccy];};
-
-};
 
 
 
